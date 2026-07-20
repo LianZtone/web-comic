@@ -1,0 +1,727 @@
+{
+  "info": {
+    "_postman_id": "7a2f5c31-8a2f-4e18-9f91-0d9b5b51f2d1",
+    "name": "Web Comick API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.access_token) {",
+                  "  pm.collectionVariables.set('token', json.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Reader API\",\n  \"email\": \"reader.api@example.test\",\n  \"password\": \"Password123!\",\n  \"password_confirmation\": \"Password123!\",\n  \"device_name\": \"postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const json = pm.response.json();",
+                  "if (json.access_token) {",
+                  "  pm.collectionVariables.set('token', json.access_token);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"reader.api@example.test\",\n  \"password\": \"Password123!\",\n  \"device_name\": \"postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Me",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "me"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Logout All",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout-all",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout-all"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Home",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/home",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "home"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Explore",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/explore",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "explore"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Comics Index",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/comics?per_page=12&page=1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics"
+              ],
+              "query": [
+                {
+                  "key": "per_page",
+                  "value": "12"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Comic Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Chapter Detail",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/chapters/{{chapter_number}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "chapters",
+                "{{chapter_number}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Comic Feedback",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/feedback?comment_sort=newest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "feedback"
+              ],
+              "query": [
+                {
+                  "key": "comment_sort",
+                  "value": "newest"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Chapter Feedback",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/chapters/{{chapter_number}}/feedback?comment_sort=newest",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "chapters",
+                "{{chapter_number}}",
+                "feedback"
+              ],
+              "query": [
+                {
+                  "key": "comment_sort",
+                  "value": "newest"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Comic Reaction Toggle (Guest Allowed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Reader-Key",
+                "value": "{{reader_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"like\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/reactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "reactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Chapter Reaction Toggle (Guest Allowed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Reader-Key",
+                "value": "{{reader_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"like\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/chapters/{{chapter_number}}/reactions",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "chapters",
+                "{{chapter_number}}",
+                "reactions"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Comic Feedback Vote (Guest Allowed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Reader-Key",
+                "value": "{{reader_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vote\": \"like\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/feedback/{{comic_comment_id}}/vote",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "feedback",
+                "{{comic_comment_id}}",
+                "vote"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Chapter Comment Vote (Guest Allowed)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-Reader-Key",
+                "value": "{{reader_key}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"vote\": \"like\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/chapters/{{chapter_number}}/comments/{{chapter_comment_id}}/vote",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "chapters",
+                "{{chapter_number}}",
+                "comments",
+                "{{chapter_comment_id}}",
+                "vote"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Protected (Bearer Token)",
+      "item": [
+        {
+          "name": "Bookmark Toggle",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/bookmark",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "bookmark"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Rate Comic",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/rating",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "rating"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Comic Feedback",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"score\": 5,\n  \"body\": \"Komentar feedback comic dari Postman\",\n  \"is_spoiler\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/feedback",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "feedback"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Comic Feedback",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Komentar feedback comic diupdate dari Postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/feedback/{{comic_comment_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "feedback",
+                "{{comic_comment_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Comic Feedback",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/feedback/{{comic_comment_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "feedback",
+                "{{comic_comment_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Create Chapter Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Komentar chapter dari Postman\",\n  \"is_spoiler\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/chapters/{{chapter_number}}/comments",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "chapters",
+                "{{chapter_number}}",
+                "comments"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update Chapter Comment",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Komentar chapter diupdate dari Postman\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/chapters/{{chapter_number}}/comments/{{chapter_comment_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "chapters",
+                "{{chapter_number}}",
+                "comments",
+                "{{chapter_comment_id}}"
+              ]
+            }
+          }
+        },
+        {
+          "name": "Delete Chapter Comment",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/comics/{{comic_slug}}/chapters/{{chapter_number}}/comments/{{chapter_comment_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "comics",
+                "{{comic_slug}}",
+                "chapters",
+                "{{chapter_number}}",
+                "comments",
+                "{{chapter_comment_id}}"
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://127.0.0.1:8000"
+    },
+    {
+      "key": "token",
+      "value": ""
+    },
+    {
+      "key": "comic_slug",
+      "value": "afterglow-protocol"
+    },
+    {
+      "key": "chapter_number",
+      "value": "1"
+    },
+    {
+      "key": "comic_comment_id",
+      "value": "1"
+    },
+    {
+      "key": "chapter_comment_id",
+      "value": "1"
+    },
+    {
+      "key": "reader_key",
+      "value": "postman-reader-1"
+    }
+  ]
+}

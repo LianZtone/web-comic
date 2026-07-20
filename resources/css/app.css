@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@source "../**/*.blade.php";
+@source "../**/*.js";
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+@source "../../storage/framework/views/*.php";
+
+@theme {
+    --font-sans: "Sora", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Sora", ui-sans-serif, system-ui, sans-serif;
+}
+
+@plugin "@tailwindcss/forms" {
+    strategy: "class";
+}
+
+@plugin "daisyui" {
+    themes: light --default, dark --prefersdark, corporate;
+}
+
+@layer components {
+    .field-control {
+        @apply flex flex-col gap-2;
+    }
+
+    .field-label {
+        @apply px-0 pb-0;
+    }
+
+    .field-label-text {
+        @apply text-sm font-semibold leading-6 text-base-content;
+    }
+
+    .field-shell {
+        @apply h-14 rounded-2xl border-base-300/70 bg-base-200/35 px-4 shadow-sm transition-colors;
+    }
+
+    .field-shell:focus-within {
+        @apply border-primary/50 bg-base-100;
+    }
+
+    .field-shell-danger {
+        @apply border-error/30 bg-error/5;
+    }
+
+    .field-input {
+        @apply h-full w-full border-0 bg-transparent px-0 text-sm placeholder:text-base-content/35 focus:outline-none focus:ring-0;
+    }
+
+    .field-icon {
+        @apply h-4 w-4 shrink-0 text-base-content/45;
+    }
+
+    .field-select {
+        @apply h-14 w-full rounded-2xl border-base-300/70 bg-base-200/35 shadow-sm;
+    }
+
+    .field-textarea {
+        @apply w-full rounded-2xl border-base-300/70 bg-base-200/35 shadow-sm placeholder:text-base-content/35;
+    }
+
+    .field-file {
+        @apply w-full rounded-2xl border-base-300/70 bg-base-200/35 shadow-sm;
+    }
+
+    .field-help {
+        @apply mt-1 text-sm text-base-content/55;
+    }
+
+    .field-error {
+        @apply mt-1 text-sm text-error;
+    }
+
+    .field-check {
+        @apply label cursor-pointer justify-start gap-3 px-0;
+    }
+
+    .field-search-shell {
+        @apply rounded-2xl border-base-300/70 bg-base-200/45 shadow-sm transition-colors;
+    }
+
+    .field-search-shell:focus-within {
+        @apply border-primary/50 bg-base-100;
+    }
+
+    .field-search-input {
+        @apply border-0 bg-transparent text-sm placeholder:text-base-content/40 focus:outline-none focus:ring-0;
+    }
+}
+
+
+@media (min-width: 1280px) {
+    .container {
+        @apply max-w-screen-xl;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        @apply max-w-screen-lg;
+    }
+    
+}
+
+@media (min-width: 640px) {
+    .container {
+        @apply max-w-screen-md;
+    }
+}
+
+@media (min-width: 480px) {
+    .container {
+        @apply max-w-screen-sm;
+    }
+}

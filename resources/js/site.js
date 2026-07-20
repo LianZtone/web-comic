@@ -1,0 +1,24 @@
+import { initAdminDrawers } from './site/admin-drawer';
+import { initChapterLists } from './site/chapter-lists';
+import { initCountdowns, initLiveClock } from './site/countdown';
+import { initFlashToasts } from './site/flash-toasts';
+import { initLibraryCollections } from './site/library';
+import { applyComicChapterReadState, applyUpdateReadState, initReaderHistory } from './site/reading-progress';
+import { initReader } from './site/reader';
+import { initRecommendationSections } from './site/recommendations';
+import { initTheme } from './site/theme';
+import { initUpdateSections } from './site/updates';
+
+initTheme();
+initRecommendationSections();
+initUpdateSections();
+initReader();
+initAdminDrawers();
+initReaderHistory();
+applyUpdateReadState();
+applyComicChapterReadState();
+initLibraryCollections();
+initChapterLists();
+initFlashToasts();
+initCountdowns();
+initLiveClock();
