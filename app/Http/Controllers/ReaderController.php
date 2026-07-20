@@ -1558,7 +1558,6 @@ class ReaderController extends Controller
             ->route('chapters.show', [
                 'slug' => $slug,
                 'chapter' => $chapter,
-                'comment_sort' => $this->readerCommentSort(request()),
             ])
             ->with('reader_focus', true);
     }

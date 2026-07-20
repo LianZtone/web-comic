@@ -334,7 +334,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::redirect('/', '/admin/comics')->name('home');
         Route::get('comments', [AdminCommentController::class, 'index'])->name('comments.index');
-        Route::post('comments/bulk', [AdminCommentController::class, 'bulkUpdate'])->name('comments.bulk');
+        Route::match(['post', 'patch'], 'comments/bulk', [AdminCommentController::class, 'bulkUpdate'])->name('comments.bulk');
         Route::patch('comments/{comment}/visibility', [AdminCommentController::class, 'updateVisibility'])->name('comments.visibility');
         Route::delete('comments/{comment}', [AdminCommentController::class, 'destroy'])->name('comments.destroy');
         Route::get('comic-comments', [AdminComicCommentController::class, 'index'])->name('comic-comments.index');

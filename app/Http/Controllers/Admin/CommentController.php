@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ChapterComment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class CommentController extends Controller
@@ -14,6 +16,23 @@ class CommentController extends Controller
     {
         $search = trim((string) $request->string('q'));
         $visibility = trim((string) $request->string('visibility'));
+        $commentsReady = $this->commentsReady();
+
+        if (! $commentsReady) {
+            return view('admin.comments.index', [
+                'comments' => new LengthAwarePaginator([], 0, 12),
+                'filters' => [
+                    'q' => $search,
+                    'visibility' => $visibility,
+                ],
+                'stats' => [
+                    'total' => 0,
+                    'visible' => 0,
+                    'hidden' => 0,
+                ],
+                'setupRequired' => true,
+            ]);
+        }
 
         $query = ChapterComment::query()
             ->with(['chapter.comic', 'user'])
@@ -49,10 +68,15 @@ class CommentController extends Controller
                 'visibility' => $visibility,
             ],
             'stats' => [
-                'total' => ChapterComment::query()->count(),
-                'visible' => ChapterComment::query()->where('is_visible', true)->count(),
-                'hidden' => ChapterComment::query()->where('is_visible', false)->count(),
+                'total' => ChapterComment::query()->count('*'),
+                'visible' => Schema::hasColumn('chapter_comments', 'is_visible')
+                    ? ChapterComment::query()->where('is_visible', true)->count('*')
+                    : 0,
+                'hidden' => Schema::hasColumn('chapter_comments', 'is_visible')
+                    ? ChapterComment::query()->where('is_visible', false)->count('*')
+                    : 0,
             ],
+            'setupRequired' => false,
         ]);
     }
 
@@ -84,7 +108,7 @@ class CommentController extends Controller
             ->unique()
             ->values();
         $comments = ChapterComment::query()
-            ->whereIn('id', $commentIds)
+            ->whereIn('id', $commentIds, 'and', false)
             ->get();
 
         if ($comments->isEmpty()) {
@@ -96,7 +120,10 @@ class CommentController extends Controller
         $affected = $comments->count();
 
         if ($data['action'] === 'delete') {
-            ChapterComment::query()->whereIn('id', $commentIds)->delete();
+            ChapterComment::query()
+                ->whereIn('id', $commentIds, 'and', false)
+                ->toBase()
+                ->delete(null);
 
             return redirect()
                 ->back()
@@ -106,7 +133,7 @@ class CommentController extends Controller
         $visible = $data['action'] === 'show';
 
         ChapterComment::query()
-            ->whereIn('id', $commentIds)
+            ->whereIn('id', $commentIds, 'and', false)
             ->update(['is_visible' => $visible]);
 
         return redirect()
@@ -118,10 +145,18 @@ class CommentController extends Controller
 
     public function destroy(ChapterComment $comment): RedirectResponse
     {
-        $comment->delete();
+        ChapterComment::query()
+            ->whereKey($comment->getKey())
+            ->toBase()
+            ->delete(null);
 
         return redirect()
             ->back()
             ->with('success', 'Komentar berhasil dihapus.');
+    }
+
+    private function commentsReady(): bool
+    {
+        return Schema::hasTable('chapter_comments');
     }
 }

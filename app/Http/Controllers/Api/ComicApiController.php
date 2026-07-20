@@ -193,6 +193,12 @@ class ComicApiController extends Controller
 
     public function comicFeedback(Request $request, string $slug): JsonResponse
     {
+        if (! $this->databaseReady()) {
+            return response()->json([
+                'message' => 'Comic not found.',
+            ], 404);
+        }
+
         $comic = Comic::query()->where('slug', $slug)->first();
 
         if (! $comic) {
@@ -312,6 +318,12 @@ class ComicApiController extends Controller
 
     public function chapterFeedback(Request $request, string $slug, int $chapter): JsonResponse
     {
+        if (! $this->databaseReady()) {
+            return response()->json([
+                'message' => 'Chapter not found.',
+            ], 404);
+        }
+
         $chapterModel = Chapter::query()
             ->where('number', $chapter)
             ->whereHas('comic', fn ($query) => $query->where('slug', $slug))
@@ -616,5 +628,14 @@ class ComicApiController extends Controller
             'count' => (int) ($counts[$key] ?? 0),
             'active' => in_array($key, $active, true),
         ])->values()->all();
+    }
+
+    private function databaseReady(): bool
+    {
+        try {
+            return Schema::hasTable('comics') && Schema::hasTable('chapters');
+        } catch (\Throwable) {
+            return false;
+        }
     }
 }

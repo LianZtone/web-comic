@@ -11,13 +11,14 @@ use App\Support\ComicGenres;
 use App\Support\ComicMetadata;
 use App\Support\ComicMedia;
 use App\Support\TextSanitizer;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
 class ComicController extends Controller
@@ -56,12 +57,18 @@ class ComicController extends Controller
                 ->withQueryString();
 
             $stats = [
-                'total_comics' => Comic::query()->count(),
-                'total_chapters' => Chapter::query()->count(),
-                'featured_total' => Comic::query()->where('is_featured', true)->count(),
-                'total_comments' => $commentsReady ? ChapterComment::query()->count() : 0,
-                'hidden_comments' => $commentsReady ? ChapterComment::query()->where('is_visible', false)->count() : 0,
-                'total_reactions' => $reactionsReady ? ChapterReaction::query()->count() : 0,
+                'total_comics' => Comic::query()->count('*'),
+                'total_chapters' => Chapter::query()->count('*'),
+                'featured_total' => Comic::query()->where('is_featured', true)->count('*'),
+                'total_comments' => $commentsReady ? ChapterComment::query()->count('*') : 0,
+                // Catatan: kolom "is_visible" di chapter_comments bisa saja tidak ada pada schema versi lama.
+                'hidden_comments' => $commentsReady
+                    ? (Schema::hasColumn('chapter_comments', 'is_visible')
+                        ? ChapterComment::query()->where('is_visible', false)->count('*')
+                        : 0)
+                    : 0,
+                'total_reactions' => $reactionsReady ? ChapterReaction::query()->count('*') : 0,
+
             ];
             $recentChapters = Chapter::query()
                 ->with('comic')
@@ -142,9 +149,9 @@ class ComicController extends Controller
             'setupRequired' => ! $backendReady,
             'curationReady' => $curationReady,
             'stats' => [
-                'featured' => $backendReady ? Comic::query()->where('is_featured', true)->count() : 0,
-                'recommended' => $curationReady ? Comic::query()->where('is_recommended', true)->count() : 0,
-                'admin_picks' => $curationReady ? Comic::query()->where('is_admin_pick', true)->count() : 0,
+                'featured' => $backendReady ? Comic::query()->where('is_featured', true)->count('*') : 0,
+                'recommended' => $curationReady ? Comic::query()->where('is_recommended', true)->count('*') : 0,
+                'admin_picks' => $curationReady ? Comic::query()->where('is_admin_pick', true)->count('*') : 0,
             ],
         ]);
     }
@@ -244,6 +251,76 @@ class ComicController extends Controller
             ->with('success', 'Kurasi explore berhasil diperbarui.');
     }
 
+    public function batchUpdateCuration(Request $request): RedirectResponse
+    {
+        if (! $this->backendReady()) {
+            return redirect()
+                ->back()
+                ->withErrors(['curation' => 'Backend komik belum siap. Jalankan migrasi terlebih dulu.']);
+        }
+
+        $comicIds = collect($request->input('comic_ids', []))
+            ->map(fn ($id) => (int) $id)
+            ->filter(fn (int $id) => $id > 0)
+            ->unique()
+            ->values()
+            ->all();
+
+        if (count($comicIds) === 0) {
+            return redirect()
+                ->back()
+                ->withErrors(['curation' => 'Tidak ada komik yang dipilih untuk diperbarui.']);
+        }
+
+        $rules = [
+            'comic_ids' => ['required', 'array', 'min:1'],
+            'comic_ids.*' => ['integer', 'distinct', 'min:1', Rule::exists('comics', 'id')],
+            'is_featured' => ['required', 'array'],
+            'is_featured.*' => ['required', 'boolean'],
+            'sort_order' => ['required', 'array'],
+            'sort_order.*' => ['required', 'integer', 'min:0'],
+        ];
+
+        if ($this->curationReady()) {
+            $rules['is_recommended'] = ['required', 'array'];
+            $rules['is_recommended.*'] = ['required', 'boolean'];
+            $rules['recommended_order'] = ['required', 'array'];
+            $rules['recommended_order.*'] = ['required', 'integer', 'min:0'];
+
+            $rules['is_admin_pick'] = ['required', 'array'];
+            $rules['is_admin_pick.*'] = ['required', 'boolean'];
+            $rules['admin_pick_order'] = ['required', 'array'];
+            $rules['admin_pick_order.*'] = ['required', 'integer', 'min:0'];
+        }
+
+        $data = $request->validate($rules);
+
+        $pinnedCuration = collect($comicIds)->map(function (int $id) use ($data) {
+            return [
+                'id' => $id,
+                'payload' => [
+                    'is_featured' => (bool) $data['is_featured'][$id],
+                    'sort_order' => (int) $data['sort_order'][$id],
+                    ...( $this->curationReady() ? [
+                        'is_recommended' => (bool) $data['is_recommended'][$id],
+                        'recommended_order' => (int) $data['recommended_order'][$id],
+                        'is_admin_pick' => (bool) $data['is_admin_pick'][$id],
+                        'admin_pick_order' => (int) $data['admin_pick_order'][$id],
+                    ] : [] ),
+                ],
+            ];
+        });
+
+        foreach ($pinnedCuration as $item) {
+            Comic::query()->whereKey($item['id'])->update($item['payload']);
+        }
+
+        return redirect()
+            ->route('admin.comics.curation')
+            ->with('success', 'Kurasi explore berhasil diperbarui (batch).');
+    }
+
+
     public function destroy(Comic $comic): RedirectResponse
     {
         foreach ($comic->chapters as $chapter) {
@@ -252,7 +329,10 @@ class ComicController extends Controller
 
         ComicMedia::deleteManagedPath($comic->cover_url);
         ComicMedia::deleteManagedPath($comic->banner_url);
-        $comic->delete();
+        Comic::query()
+            ->whereKey($comic->getKey())
+            ->toBase()
+            ->delete(null);
 
         return redirect()
             ->route('admin.comics.index')
@@ -263,7 +343,7 @@ class ComicController extends Controller
     {
         $validated = $request->validate([
             'title' => ['required', 'string', 'max:255'],
-            'slug' => ['nullable', 'string', 'max:255', Rule::unique('comics', 'slug')->ignore($comic)],
+            'slug' => ['nullable', 'string', 'max:255', Rule::unique('comics', 'slug')->ignore($comic?->getKey())],
             'subtitle' => ['nullable', 'string', 'max:255'],
             'tagline' => ['nullable', 'string', 'max:255'],
             'summary' => ['required', 'string'],
@@ -371,6 +451,10 @@ class ComicController extends Controller
         $search = trim((string) $request->string('q'));
 
         if ($search === '') {
+            return response()->json([]);
+        }
+
+        if (! $this->backendReady()) {
             return response()->json([]);
         }
 

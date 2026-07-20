@@ -121,7 +121,7 @@
                 </form>
             </dialog>
 
-            {{-- <div class="rounded-[2rem] border border-base-300/70 bg-base-100/60 p-5 shadow-sm sm:p-6">
+            <div class="rounded-[2rem] border border-base-300/70 bg-base-100/60 p-5 shadow-sm sm:p-6">
                 <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                     <div>
                         <div class="text-xs uppercase tracking-[0.28em] text-base-content/45">Hasil pencarian</div>
@@ -129,7 +129,7 @@
                     </div>
                     @include('partials.comics.catalog-active-filters')
                 </div>
-            </div> --}}
+            </div>
 
             @if ($comics->isEmpty())
                 <div class="hero rounded-[2rem] border border-dashed border-base-300/70 mb-8 bg-base-100/50 py-16 shadow-sm">

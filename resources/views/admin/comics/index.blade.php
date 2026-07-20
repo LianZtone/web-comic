@@ -20,7 +20,7 @@
         @include('admin.comics.partials.recent-comments')
     </section>
 
-    <section class="overflow-hidden rounded-box border border-base-300/70 bg-base-100 shadow-sm">
+    <section class="overflow-hidden rounded-box border border-base-300/70 bg-base-100 shadow-sm z-0">
         <div class="overflow-x-auto">
             <table class="table table-zebra">
                 <thead>

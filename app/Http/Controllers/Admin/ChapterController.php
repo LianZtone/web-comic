@@ -9,6 +9,7 @@ use App\Support\ComicMedia;
 use App\Support\TextSanitizer;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Validation\Rule;
@@ -21,7 +22,25 @@ class ChapterController extends Controller
     {
         $search = trim((string) $request->string('q'));
         $publication = trim((string) $request->string('publication'));
-        $commentsReady = Schema::hasTable('chapter_comments');
+        $backendReady = $this->backendReady();
+        $commentsReady = $backendReady && Schema::hasTable('chapter_comments');
+
+        if (! $backendReady) {
+            return view('admin.chapters.index', [
+                'chapters' => new LengthAwarePaginator([], 0, 12),
+                'commentsReady' => false,
+                'filters' => [
+                    'q' => $search,
+                    'publication' => $publication,
+                ],
+                'stats' => [
+                    'total' => 0,
+                    'published' => 0,
+                    'draft' => 0,
+                ],
+                'setupRequired' => true,
+            ]);
+        }
 
         $query = Chapter::query()
             ->with('comic')
@@ -59,10 +78,11 @@ class ChapterController extends Controller
                 'publication' => $publication,
             ],
             'stats' => [
-                'total' => Chapter::query()->count(),
-                'published' => Chapter::query()->where('is_published', true)->count(),
-                'draft' => Chapter::query()->where('is_published', false)->count(),
+                'total' => Chapter::query()->count('*'),
+                'published' => Chapter::query()->where('is_published', true)->count('*'),
+                'draft' => Chapter::query()->where('is_published', false)->count('*'),
             ],
+            'setupRequired' => false,
         ]);
     }
 
@@ -112,7 +132,10 @@ class ChapterController extends Controller
     {
         abort_unless($chapter->comic_id === $comic->id, 404);
         ComicMedia::deleteManagedPages($chapter->pages ?? []);
-        $chapter->delete();
+        Chapter::query()
+            ->whereKey($chapter->getKey())
+            ->toBase()
+            ->delete(null);
 
         return redirect()
             ->route('admin.comics.edit', $comic)
@@ -218,5 +241,10 @@ class ChapterController extends Controller
         throw ValidationException::withMessages([
             'pages' => 'Unggah gambar chapter, isi folder sumber, atau masukkan daftar halaman.',
         ]);
+    }
+
+    private function backendReady(): bool
+    {
+        return Schema::hasTable('comics') && Schema::hasTable('chapters');
     }
 }

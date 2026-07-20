@@ -84,7 +84,7 @@
             <label class="field-control">
                 <div class="field-label"><span class="field-label-text">Sumber</span></div>
                 <select name="source_type" class="select select-bordered field-select w-full">
-                    <option value="selected">Tidak diketahui</option>
+                    <option value="" @selected(empty(old('source_type', $comic->source_type)))>Tidak diketahui</option>
                     @foreach ($sourceOptions as $source)
                         <option value="{{ $source }}" @selected(old('source_type', $comic->source_type) === $source)>{{ $source }}</option>
                     @endforeach

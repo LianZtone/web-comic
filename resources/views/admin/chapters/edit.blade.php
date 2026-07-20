@@ -6,7 +6,12 @@
 @section('admin_content')
     <section class="grid gap-5 xl:grid-cols-[minmax(0,1fr)_320px]">
         <div class="rounded-box border border-base-300/70 bg-base-100 p-6 shadow-sm">
-            <div class="mb-6">
+            {{-- tombol kembali ke kelola chapter --}}
+            <div class="flex items-center gap-3">
+                <a href="{{ route('admin.chapters.index') }}" class="btn btn-ghost rounded-2xl border border-base-300/70">Kembali ke Dashboard Komik</a>
+            </div>
+
+            <div class="mb-6 mt-4">
                 <div class="text-xs font-semibold uppercase tracking-[0.28em] text-base-content/45">Admin</div>
                 <h1 class="mt-2 text-3xl font-semibold">Edit {{ $chapter->title }}</h1>
                 <p class="mt-2 text-base-content/65">{{ $comic->title }} · Chapter {{ str_pad((string) $chapter->number, 2, '0', STR_PAD_LEFT) }}</p>

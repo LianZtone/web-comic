@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ComicComment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\View\View;
 
 class ComicCommentController extends Controller
@@ -14,6 +16,23 @@ class ComicCommentController extends Controller
     {
         $search = trim((string) $request->string('q'));
         $visibility = trim((string) $request->string('visibility'));
+        $commentsReady = $this->commentsReady();
+
+        if (! $commentsReady) {
+            return view('admin.comic-comments.index', [
+                'comments' => new LengthAwarePaginator([], 0, 12),
+                'filters' => [
+                    'q' => $search,
+                    'visibility' => $visibility,
+                ],
+                'stats' => [
+                    'total' => 0,
+                    'visible' => 0,
+                    'hidden' => 0,
+                ],
+                'setupRequired' => true,
+            ]);
+        }
 
         $query = ComicComment::query()
             ->with(['comic', 'user'])
@@ -45,10 +64,15 @@ class ComicCommentController extends Controller
                 'visibility' => $visibility,
             ],
             'stats' => [
-                'total' => ComicComment::query()->count(),
-                'visible' => ComicComment::query()->where('is_visible', true)->count(),
-                'hidden' => ComicComment::query()->where('is_visible', false)->count(),
+                'total' => ComicComment::query()->count('*'),
+                'visible' => Schema::hasColumn('comic_comments', 'is_visible')
+                    ? ComicComment::query()->where('is_visible', true)->count('*')
+                    : 0,
+                'hidden' => Schema::hasColumn('comic_comments', 'is_visible')
+                    ? ComicComment::query()->where('is_visible', false)->count('*')
+                    : 0,
             ],
+            'setupRequired' => false,
         ]);
     }
 
@@ -80,7 +104,7 @@ class ComicCommentController extends Controller
             ->unique()
             ->values();
         $comments = ComicComment::query()
-            ->whereIn('id', $commentIds)
+            ->whereIn('id', $commentIds, 'and', false)
             ->get();
 
         if ($comments->isEmpty()) {
@@ -92,7 +116,10 @@ class ComicCommentController extends Controller
         $affected = $comments->count();
 
         if ($data['action'] === 'delete') {
-            ComicComment::query()->whereIn('id', $commentIds)->delete();
+            ComicComment::query()
+                ->whereIn('id', $commentIds, 'and', false)
+                ->toBase()
+                ->delete(null);
 
             return redirect()
                 ->back()
@@ -102,7 +129,7 @@ class ComicCommentController extends Controller
         $visible = $data['action'] === 'show';
 
         ComicComment::query()
-            ->whereIn('id', $commentIds)
+            ->whereIn('id', $commentIds, 'and', false)
             ->update(['is_visible' => $visible]);
 
         return redirect()
@@ -114,10 +141,18 @@ class ComicCommentController extends Controller
 
     public function destroy(ComicComment $comment): RedirectResponse
     {
-        $comment->delete();
+        ComicComment::query()
+            ->whereKey($comment->getKey())
+            ->toBase()
+            ->delete(null);
 
         return redirect()
             ->back()
             ->with('success', 'Komentar seri berhasil dihapus.');
+    }
+
+    private function commentsReady(): bool
+    {
+        return Schema::hasTable('comic_comments');
     }
 }

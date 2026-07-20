@@ -2,7 +2,7 @@
     $user = auth()->user();
 @endphp
 
-<aside class="flex min-h-full w-full flex-col overflow-x-hidden">
+<aside class="flex min-h-full w-full flex-col overflow-x-visible">
     
     <div class="border-b border-base-300/70 p-4">
         <a href="{{ route('admin.comics.index') }}" class="flex items-center gap-3 is-drawer-close:justify-center" aria-label="Dashboard admin" title="Dashboard admin">
@@ -98,9 +98,9 @@
     </ul>
     
     <div class="mt-auto border-t border-base-300/70 p-4">
-        <form method="POST" action="{{ route('admin.logout') }}">
+        <form method="POST" action="{{ route('logout') }}">
             @csrf
-            <button type="submit" class="btn btn-ghost w-full justify-start rounded-xl border border-base-300/70 transition-all duration-200 ease-out is-drawer-close:justify-center is-drawer-close:px-2" aria-label="Logout Admin" title="Logout Admin">
+            <button type="submit" class="btn btn-ghost w-full justify-start rounded-xl border border-base-300/70 transition-all duration-200 ease-out is-drawer-close:justify-center is-drawer-close:px-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-7.5a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 6 21h7.5a2.25 2.25 0 0 0 2.25-2.25V15m5.25-3H9m0 0 3-3m-3 3 3 3" />
                 </svg>

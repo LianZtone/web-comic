@@ -44,8 +44,12 @@
                         </svg>
                         <span class="sr-only" data-theme-text>Aktifkan mode gelap</span>
                     </label>
+                    <a href="{{ route('home') }}" class="btn btn-ghost btn-sm border border-base-300/70" aria-label="Lihat situs" title="Lihat situs">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 12l9-8 9 8M5 10v10h14V10" />
+                        </svg>
+                    </a>
 
-                    {{-- <a href="{{ route('home') }}" class="btn btn-ghost btn-sm border border-base-300/70">Lihat situs</a> --}}
 
                     <div class="hidden items-center gap-3 rounded-2xl border border-base-300/70 bg-base-100/70 px-3 py-2 sm:flex">
                         <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/15 text-sm font-semibold text-primary">
@@ -56,19 +60,19 @@
                             <div class="text-xs text-base-content/55">Administrator aktif</div>
                         </div>
                     </div>
-                </div>
+                </div> 
             </nav>
 
             @include('layouts.partials.admin-alert-modal')
 
-            <div class="flex-1 p-4 lg:p-6">
+            <div class="flex-1 p-4 lg:p-6 z-0">
                 <div class="mx-auto flex w-full max-w-7xl flex-col gap-5">
                     @yield('admin_content')
                 </div>
             </div>
         </div>
 
-        <div class="drawer-side z-40">
+        <div class="drawer-side z-50">
             <label for="admin-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
 
             <div class="min-h-full border-r border-base-300/70 bg-base-200 transition-[width] duration-300 ease-out is-drawer-open:w-72 is-drawer-close:w-24">

@@ -1,7 +1,7 @@
 import { adminDrawerQuery, adminDrawerStorageKey } from './config';
 
 export function syncAdminDrawerState(checkbox) {
-    const expanded = localStorage.getItem(adminDrawerStorageKey) !== 'collapsed';
+    const expanded = localStorage.getItem(adminDrawerStorageKey) === 'expanded';
     checkbox.checked = adminDrawerQuery.matches ? expanded : false;
 }
 

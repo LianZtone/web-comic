@@ -4,11 +4,11 @@
             <input type="checkbox" name="comment_ids[]" value="{{ $comment->id }}" class="checkbox checkbox-sm" data-bulk-item>
         </label>
     </td>
-    <td class="min-w-[12rem]">
+    <td>
         <div class="font-semibold">{{ $comment->display_name }}</div>
         @include('admin.users.partials.moderation-badges', ['user' => $comment->user])
     </td>
-    <td class="min-w-[24rem]">
+    <td >
         @if ($comment->is_spoiler)
             <div class="mb-2">
                 <span class="badge badge-warning badge-sm">Spoiler</span>
@@ -16,7 +16,7 @@
         @endif
         <div class="line-clamp-3 text-sm leading-6 text-base-content/80">{{ $comment->body }}</div>
     </td>
-    <td class="min-w-[16rem]">
+    <td>
         <div class="text-sm font-medium">{{ $comment->comic?->title ?? 'Komik tidak ditemukan' }}</div>
     </td>
     <td>
@@ -29,7 +29,7 @@
     </td>
     <td>{{ $comment->likes_count }}</td>
     <td class="text-sm text-base-content/60">{{ $comment->created_at?->diffForHumans() ?? 'Baru saja' }}</td>
-    <td class="min-w-[16rem]">
+    <td class="min-w-[12rem]">
         <div class="space-y-2">
             <div class="flex flex-wrap justify-end gap-2">
                 @if ($comment->comic)

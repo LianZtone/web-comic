@@ -71,11 +71,11 @@
                         <th>Komik</th>
                         <th>Status</th>
                         <th>Featured</th>
-                        <th>Urutan</th>
+                        <th>Urutan Featured</th>
                         <th>Rekomendasi</th>
-                        <th>Urutan</th>
+                        <th>Urutan Rekomendasi</th>
                         <th>Admin Pick</th>
-                        <th>Urutan</th>
+                        <th>Urutan Admin Pick</th>
                         <th class="text-right">Aksi</th>
                     </tr>
                 </thead>
@@ -125,11 +125,13 @@
                             </td>
                             <td class="min-w-[14rem]">
                                 <div class="flex justify-end gap-2 flex-wrap">
+                                    <a href="{{ route('admin.comics.edit', $comic) }}" class="btn btn-ghost btn-sm rounded-2xl border border-base-300/70">Edit</a>
+
                                     <form id="curation-{{ $comic->id }}" method="POST" action="{{ route('admin.comics.curation.update', $comic) }}">
                                         @csrf
                                         @method('PATCH')
                                     </form>
-                                    <a href="{{ route('admin.comics.edit', $comic) }}" class="btn btn-ghost btn-sm rounded-2xl border border-base-300/70">Edit</a>
+
                                     <button type="submit" form="curation-{{ $comic->id }}" class="btn btn-primary btn-sm rounded-2xl" @disabled($setupRequired)>Simpan</button>
                                 </div>
                             </td>

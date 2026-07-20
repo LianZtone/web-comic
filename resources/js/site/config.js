@@ -4,6 +4,7 @@ const readerStorageScope = document.documentElement.dataset.readerStorageScope |
 const createScopedStorageKey = (baseKey) => `${baseKey}:${readerStorageScope}`;
 
 export const chapterReadStorageKey = createScopedStorageKey('velmics-read-chapters');
+export const chapterListViewStorageKey = createScopedStorageKey('velmics-chapter-list-view');
 export const bookmarkStorageKey = createScopedStorageKey('velmics-bookmarks');
 export const readlistStorageKey = createScopedStorageKey('velmics-readlist');
 export const historyStorageKey = createScopedStorageKey('velmics-history');

@@ -5,10 +5,14 @@
 
 @section('admin_content')
     <section class="grid gap-5 xl:grid-cols-[1.15fr_0.85fr]">
+        {{-- tombol kembali ke kelola chapter --}}
+        <div class="flex items-center gap-3">
+            <a href="{{ route('admin.comics.index') }}" class="btn btn-ghost rounded-2xl border border-base-300/70">Kembali ke Dashboard Komik</a>
+        </div>
         <div class="rounded-box border border-base-300/70 bg-base-100 p-6 shadow-sm">
             <div class="mb-6">
                 <div class="text-xs font-semibold uppercase tracking-[0.28em] text-base-content/45">Admin</div>
-                <h1 class="mt-2 text-3xl font-semibold">Edit {{ $comic->title }}</h1>
+                <h1 class="mt-2 text-3xl font-semibold">Edit  {{ $comic->title }}</h1>
             </div>
 
             <form action="{{ route('admin.comics.update', $comic) }}" method="POST" enctype="multipart/form-data">
