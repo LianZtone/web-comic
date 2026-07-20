@@ -1,59 +1,152 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Web-Comic (comick)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+**Portal komik digital + comic reader** berbasis **Laravel**.
 
-## About Laravel
+## Tujuan Aplikasi
+Aplikasi ini menyediakan:
+- **Portal komik digital** untuk browsing/katalog, eksplorasi, dan kurasi.
+- **Reader** untuk membaca chapter (page-by-page) serta interaksi pembaca.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Fitur Utama
+### 1) Portal & Katalog
+- **Catalog / Explore**: daftar dan eksplor komik.
+- **Curation / Rekomendasi**: penandaan fitur (featured/recommended/admin pick) pada katalog.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 2) Rak Baca & Riwayat
+- **Rak baca / Bookmark**
+- **Read list**
+- **History** (riwayat pembacaan)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 3) Reader & Interaksi Pembaca
+- Reader chapter dengan navigasi halaman.
+- **Feedback/Comment**:
+  - komentar chapter
+  - komentar komik
+- **Vote & Reaction** (mis. like/dislike, reaksi tipe tertentu)
 
-## Learning Laravel
+### 4) Admin Panel & Moderasi
+- **Admin panel** untuk pengelolaan konten (mis. komik/chapter).
+- **Moderasi pengguna & konten** (field moderasi pada tabel `users`).
+- **Captcha** untuk pembuatan/submit form (contoh implementasi `App\Support\FormCaptcha`).
+- **2FA admin** menggunakan challenge berbasis session (`App\Support\AdminTwoFactor`).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+## Arsitektur Singkat
+- Backend: **Laravel** (Blade, Eloquent, MVC)
+- Frontend: **Vite + TailwindCSS + DaisyUI**
+- Build assets: `npm run dev` / `npm run build`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Prasyarat
+- **PHP >= 8.2**
+- Composer
+- Node.js + npm
+- Database (MySQL/MariaDB/PostgreSQL/SQLite sesuai konfigurasi)
 
-## Laravel Sponsors
+## Cara Mulai (Setup Lokal)
+1. **Clone repo**
+2. **Install dependencies PHP**
+   ```bash
+   composer install
+   ```
+3. **Install dependencies frontend**
+   ```bash
+   npm install
+   ```
+4. **Siapkan file environment**
+   - Copy `.env.example` ke `.env` (jika belum ada)
+     ```bash
+     cp .env.example .env
+     ```
+5. **Generate application key**
+   ```bash
+   php artisan key:generate
+   ```
+6. **Migrasi database**
+   ```bash
+   php artisan migrate --force
+   ```
+7. **Seed data dummy**
+   - Data admin default, demo komik, dan engagement reader.
+   ```bash
+   php artisan db:seed --force
+   ```
+   - Seeder yang dipakai:
+     - `DatabaseSeeder`
+     - `AdminUserSeeder`
+     - `DemoComicSeeder`
+     - `DemoReaderEngagementSeeder`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+8. Jalankan mode development:
+   ```bash
+   npm run dev
+   ```
+   Lalu jalankan server Laravel (di terminal lain):
+   ```bash
+   php artisan serve
+   ```
 
-### Premium Partners
+   Untuk build production:
+   ```bash
+   npm run build
+   ```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+## Akun Default Admin
+Akun admin default dibuat oleh **`database/seeders/AdminUserSeeder.php`** menggunakan env berikut:
+- `ADMIN_DEFAULT_NAME`
+- `ADMIN_DEFAULT_EMAIL`
+- `ADMIN_DEFAULT_PASSWORD`
 
-## Contributing
+Jika env tidak diset, fallback default dari seeder adalah:
+- **Name**: `Velmics Admin`
+- **Email**: `admin@velmics.test`
+- **Password**: `password`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Setelah `php artisan db:seed`, login admin melalui halaman admin.
 
-## Code of Conduct
+> Catatan keamanan: ubah nilai `ADMIN_DEFAULT_*` sebelum deployment.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Contoh `.env`
+Buat/isi minimal contoh berikut (sesuaikan DB Anda):
 
-## Security Vulnerabilities
+```env
+APP_URL=http://localhost:8000
+APP_ENV=local
+APP_DEBUG=true
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+# Database
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=web_comick
+DB_USERNAME=root
+DB_PASSWORD=
 
-## License
+# Jika aplikasi memakai email (opsional)
+# MAIL_MAILER=smtp
+# MAIL_HOST=mail.example.com
+# MAIL_PORT=587
+# MAIL_USERNAME=user
+# MAIL_PASSWORD=secret
+# MAIL_FROM_ADDRESS=admin@example.com
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+# Admin default (dipakai oleh AdminUserSeeder)
+ADMIN_DEFAULT_NAME="Velmics Admin"
+ADMIN_DEFAULT_EMAIL="admin@velmics.test"
+ADMIN_DEFAULT_PASSWORD="password"
+```
+
+## API & Dokumentasi
+Dokumentasi API tersedia di:
+- `docs/api/README.md`
+- `docs/api/web-comick.postman_collection.json`
+
+---
+## Troubleshooting Singkat
+- Jika asset frontend tidak tampil setelah setup, jalankan ulang:
+  ```bash
+  npm run dev
+  ```
+- Jika seed gagal karena tabel belum ada, pastikan migrasi sudah dijalankan dulu:
+  ```bash
+  php artisan migrate --force
+  ```
+
