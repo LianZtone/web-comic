@@ -52,7 +52,7 @@ Aplikasi ini menyediakan:
    npm install
    ```
 4. **Siapkan file environment**
-   - Copy `.env.example` ke `.env` (jika belum ada)
+   Copy `.env.example` ke `.env` (jika belum ada)
      ```bash
      cp .env.example .env
      ```
