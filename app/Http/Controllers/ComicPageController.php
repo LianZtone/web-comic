@@ -14,9 +14,13 @@ use Illuminate\View\View;
 
 class ComicPageController extends Controller
 {
-    public function show(Request $request, string $slug): View
+    public function show(Request $request, string $slug): View|\Illuminate\Http\Response
     {
-        $comic = ComicLibrary::findOrFail($slug);
+        $comic = ComicLibrary::find($slug);
+
+        if (! $comic) {
+            return response()->view('comics.not-found', [], 404);
+        }
         $seriesFeedbackSort = $this->normalizeCommentSort($request);
 
         $related = ComicLibrary::all()

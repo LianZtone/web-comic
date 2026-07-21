@@ -29,11 +29,21 @@ use Illuminate\View\View;
 
 class ReaderController extends Controller
 {
-    public function show(Request $request, string $slug, int $chapter): View
+    public function show(Request $request, string $slug, int $chapter): View|\Illuminate\Http\Response
     {
-        ['comic' => $comic, 'chapter' => $currentChapter] = ComicLibrary::findChapterOrFail($slug, $chapter);
+        $comic = ComicLibrary::find($slug);
+
+        if (! $comic) {
+            return response()->view('comics.not-found', [], 404);
+        }
 
         $chapters = collect($comic['chapters'])->values();
+        $currentChapter = $chapters->firstWhere('number', $chapter);
+
+        if (! $currentChapter) {
+            return response()->view('comics.not-found', [], 404);
+        }
+
         $chapterIndex = $chapters->search(fn (array $item) => $item['number'] === $currentChapter['number']);
         $databaseChapter = $this->findDatabaseChapter($slug, $chapter);
         $readerCommentSort = $this->readerCommentSort($request);

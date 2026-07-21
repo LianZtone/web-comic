@@ -99,7 +99,7 @@
             </div>
         </section>
 
-        <section class="hidden space-y-4" data-library-panel="catalog">
+        <section class="hidden space-y-4 mb-5" data-library-panel="catalog">
             <div class="flex flex-wrap items-end justify-between gap-3">
                 <div>
                     <div class="text-xs uppercase tracking-[0.28em] text-base-content/45">Pintasan koleksi</div>

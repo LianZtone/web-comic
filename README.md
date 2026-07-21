@@ -10,12 +10,16 @@ Aplikasi ini menyediakan:
 ## Fitur Utama
 ### 1) Portal & Katalog
 - **Catalog / Explore**: daftar dan eksplor komik.
+![home](public/assets/images/HomePage.png)
+![exlpore](public/assets/images/ExplorerPage.png)
 - **Curation / Rekomendasi**: penandaan fitur (featured/recommended/admin pick) pada katalog.
+![recomendation](public/assets/images/RecomedationPage.png)
 
 ### 2) Rak Baca & Riwayat
 - **Rak baca / Bookmark**
 - **Read list**
 - **History** (riwayat pembacaan)
+![library](public/assets/images/LibraryPage.png)
 
 ### 3) Reader & Interaksi Pembaca
 - Reader chapter dengan navigasi halaman.
@@ -23,12 +27,14 @@ Aplikasi ini menyediakan:
   - komentar chapter
   - komentar komik
 - **Vote & Reaction** (mis. like/dislike, reaksi tipe tertentu)
+![reader](public/assets/images/ReaderPage.png)
 
 ### 4) Admin Panel & Moderasi
 - **Admin panel** untuk pengelolaan konten (mis. komik/chapter).
 - **Moderasi pengguna & konten** (field moderasi pada tabel `users`).
 - **Captcha** untuk pembuatan/submit form (contoh implementasi `App\Support\FormCaptcha`).
 - **2FA admin** menggunakan challenge berbasis session (`App\Support\AdminTwoFactor`).
+![admin](public/assets/images/AdminPanel.png)
 
 ## Arsitektur Singkat
 - Backend: **Laravel** (Blade, Eloquent, MVC)
