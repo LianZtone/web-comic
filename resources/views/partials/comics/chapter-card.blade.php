@@ -4,13 +4,18 @@
         data-chapter-link data-comic-slug="{{ $comicSlug }}" data-chapter-number="{{ $chapter['number'] }}">
         <div class="min-w-0">
             <div class="flex flex-wrap items-center gap-2">
+                <span class="hidden text-success" data-chapter-checkmark>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+                    </svg>
+                </span>
                 <h3 class="text-base font-semibold text-base-content group-hover:text-primary">
                     {{ $chapter['label'] }}
                 </h3>
                 @if ($chapter['is_latest'])
                     <span class="badge badge-secondary badge-xs">Baru</span>
                 @endif
-                {{-- <span class="badge badge-success badge-xs hidden" data-chapter-read-badge>Sudah dibaca</span> --}}
+                <span class="badge badge-success badge-xs hidden" data-chapter-read-badge>Sudah dibaca</span>
             </div>
 
             <div class="mt-1 flex flex-wrap items-center gap-2 text-xs text-base-content/50">

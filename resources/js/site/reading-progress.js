@@ -28,6 +28,7 @@ export function applyComicChapterReadState() {
         const isRead = hasReadChapter(comicSlug, chapterNumber);
         const readBadge = link.querySelector('[data-chapter-read-badge]');
         const arrow = link.querySelector('[data-chapter-arrow]');
+        const checkmark = link.querySelector('[data-chapter-checkmark]');
 
         link.classList.toggle('bg-base-100/70', !isRead);
         link.classList.toggle('border-base-300/70', !isRead);
@@ -37,6 +38,10 @@ export function applyComicChapterReadState() {
 
         if (readBadge) {
             readBadge.classList.toggle('hidden', !isRead);
+        }
+
+        if (checkmark) {
+            checkmark.classList.toggle('hidden', !isRead);
         }
 
         if (arrow) {
