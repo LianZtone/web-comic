@@ -10,7 +10,7 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-sm text-base-content/45">{{ $comic['chapter_total'] }} chapter</span>
+                    {{-- <span class="text-sm text-base-content/45">{{ $comic['chapter_total'] }} chapter</span> --}}
                     {{-- view mode grid atau list --}}
                     <button type="button" class="btn btn-ghost btn-sm rounded-2xl border border-base-300/70"
                         data-chapter-view-toggle aria-pressed="false" aria-label="Ubah mode chapter">

@@ -1,6 +1,6 @@
 <article class="relative overflow-hidden rounded-[2rem] border border-base-300/70 bg-base-100/70 shadow-lg">
     <img src="{{ $comic['banner'] }}" alt="{{ $comic['title'] }} banner"
-        class="h-[220px] w-full object-cover object-top opacity-75 sm:h-[300px] xl:h-[360px]" fetchpriority="high"
+        class="h-[220px] w-full hidden md:block object-cover object-top opacity-75 sm:h-[300px] xl:h-[360px]" fetchpriority="high"
         decoding="async">
     <div class="absolute inset-0 bg-gradient-to-tr from-base-100 via-base-100/80 to-base-100/15"></div>
 
@@ -15,7 +15,7 @@
         </div>
 
         <div class="mt-3 grid gap-5 lg:grid-cols-[180px_minmax(0,1fr)] xl:grid-cols-[200px_minmax(0,1fr)]">
-            <div class="mx-auto w-full max-w-[180px] self-start lg:mx-0 lg:max-w-[200px]">
+            <div class="mx-auto w-full max-w-[180px] md:w-full self-start lg:mx-0 lg:max-w-[200px] lg:shrink-0">
                 <img src="{{ $comic['cover'] }}" alt="{{ $comic['title'] }} cover"
                     class="aspect-[4/5] w-full rounded-[1.75rem] border border-base-content/10 object-cover object-top shadow-xl"
                     decoding="async">

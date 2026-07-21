@@ -8,7 +8,7 @@
     ];
 @endphp
 
-<div id="series-feedback" class="scroll-mt-24 mx-auto w-full  px-1 pb-24 pt-2" data-feedback-shell
+<div id="series-feedback" class="scroll-mt-24 mx-auto w-full  px-1 pb-10 pt-2" data-feedback-shell
     data-reader-feedback-url="{{ route('comics.show', ['slug' => $comic['slug'], 'comment_sort' => $seriesFeedbackSort]) }}#series-feedback">
     <div class="rounded-[1.8rem] border border-base-300/70 bg-base-100/80 p-5 shadow-lg sm:p-6">
         <div class="flex flex-col gap-5">
