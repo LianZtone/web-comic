@@ -3,6 +3,7 @@
 **Portal komik digital + comic reader** berbasis **Laravel**.
 
 ## Tujuan Aplikasi
+![home](public/assets/images/HomePage.png)
 Aplikasi ini menyediakan:
 - **Portal komik digital** untuk browsing/katalog, eksplorasi, dan kurasi.
 - **Reader** untuk membaca chapter (page-by-page) serta interaksi pembaca.
@@ -10,7 +11,6 @@ Aplikasi ini menyediakan:
 ## Fitur Utama
 ### 1) Portal & Katalog
 - **Catalog / Explore**: daftar dan eksplor komik.
-![home](public/assets/images/HomePage.png)
 ![exlpore](public/assets/images/ExplorerPage.png)
 - **Curation / Rekomendasi**: penandaan fitur (featured/recommended/admin pick) pada katalog.
 ![recomendation](public/assets/images/RecomedationPage.png)
